@@ -1,0 +1,9 @@
+# cgi handler
+#AddHandler cgi-script .cgi
+#DirectoryIndex entropy.cgi
+
+# wsgi handler
+AddHandler wsgi-script .wsgi
+DirectoryIndex entropy.wsgi
+
+# eof.
