@@ -19,12 +19,10 @@
 #
 
 import random
-import sys
 import os
-import time
 
 def mkbe850():
-    """be850 passwords, entropy = 850 * 899 * 850 = 649,527,500"""
+    """be850 passwords, entropy = 850 * 899 * 850 = 649,527,500 ~~ 2^29 ~~ 6*10^8"""
 
     words = [
         # the Basic English vocabulary accordingto C.K. Ogdeni (1930); 850 common words
@@ -141,7 +139,7 @@ def mkbe850():
     return str
 
 def mkalnum54():
-    """alnum passwords, entropy = 54^16 = 5,227,573,613,485,916,806,405,226,496"""
+    """alnum passwords, entropy = 54^16 = 5,227,573,613,485,916,806,405,226,496 ~~ 2^92 ~~ 5*10^27"""
 
     chars = '23456789abcdefghjkmnopqrtuvwxyzABCDEFGHJKLMNPQRTUVWXYZ' # not 1ilI 0O sS
 
@@ -151,22 +149,36 @@ def mkalnum54():
         str = str + chars[pos]
     return str
 
+
+def mkalnum84():
+    """alphanumeric including special characters, entropy = 84^16 = 6.144.245.739.270.881.311.250.517.590.016 ~~ 2^102 ~~ 6*10^30"""
+
+    chars = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$\'(){}[]*+,-.<>:;~_' # not url special chars ? % & /
+    return "".join([chars[random.randint(0, len(chars) - 1)] for n in range(16)])
+
+
+def printOneLineWithRenderFunction(headerText, itemRenderFunction):
+    """prints a block of passwords with automatic alignment/indentation"""
+    text = "" + headerText + "\n"
+    text += "".join(["-" for n in headerText]) + "\n"
+    numberOfPasswords = 8 * 4
+    passwords = [itemRenderFunction() for n in range(numberOfPasswords)]
+    maxLength = max([len(word) for word in passwords])
+    for i in range(numberOfPasswords):
+        text += passwords[i] + "".join([" " for n in range(maxLength - len(passwords[i]))])
+        if ((i+1) % 4) == 0:
+            text += "\n"
+        else:
+            text += "  "
+    text += "\n"
+    return text
+
+
 def mkbody():
     """render page"""
-    result =  "Basic English Passwords (low entropy / e=649,527,500)\n"
-    result += "-----------------------------------------------------\n"
-    for i in range(8):
-        for j in range(3):
-            result += "%-24s " % mkbe850()
-        result += "\n"
-    result += "\n"
-    result += "Mixed Alpha Numeric Passwords (high entropy / e=10^18)\n"
-    result += "------------------------------------------------------\n"
-    for i in range(8):
-        for j in range(4):
-            result += "%s " % mkalnum54()
-        result += "\n"
-    result += "\n"
+    result = printOneLineWithRenderFunction("Basic English Passwords (low entropy / e=649,527,500 / 29 bit)", mkbe850)
+    result += printOneLineWithRenderFunction("Mixed Alpha Numeric Passwords (high entropy / e=10^27 / 92 bit)", mkalnum54)
+    result += printOneLineWithRenderFunction("Alpha,Numeric,Special Passwords (high entropy / e=10^30 / 102 bit)", mkalnum84)
     result += "source code at https://github.com/gopher/entropy"
     return result
 
