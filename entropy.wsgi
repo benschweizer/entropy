@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: ts=4 syntax=python
 #
-# Copyright (c) 2006 - 2013 Benjamin Schweizer.
+# Copyright (c) 2006 - 2013 Benjamin Schweizer and others.
 #
 # 
 # Permission to use, copy, modify, and/or distribute this software for any
@@ -179,7 +179,7 @@ def mkbody():
     result = printOneLineWithRenderFunction("Basic English Passwords (low entropy / e=649,527,500 / 29 bit)", mkbe850)
     result += printOneLineWithRenderFunction("Mixed Alpha Numeric Passwords (high entropy / e=10^27 / 92 bit)", mkalnum54)
     result += printOneLineWithRenderFunction("Alpha,Numeric,Special Passwords (high entropy / e=10^30 / 102 bit)", mkalnum84)
-    result += "source code at https://github.com/gopher/entropy"
+    result += "source code at https://github.com/cxcv/entropy"
     return result
 
 
